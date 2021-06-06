@@ -11,18 +11,14 @@
     </head>
     <body>
         <div id="player" style="background-color:black;"></div>
-
         <script type="text/javascript">
             var console = {};
             console.log = function(message) {
-                window.webkit.messageHandlers['\(consoleLogKey)'].postMessage(message)
+                window.webkit.messageHandlers['console.log'].postMessage(message)
             };
        
             var tag = document.createElement('script');
        
-            var height = getQueryVariable('height');
-            console.log('height = ' + height);
-
             tag.src = "https://www.youtube.com/iframe_api";
             var firstScriptTag = document.getElementsByTagName('script')[0];
             firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
@@ -31,7 +27,7 @@
             function onYouTubeIframeAPIReady() {
                 player = new YT.Player('player', {
                     width: '100%',
-                    height: '100%',
+                    height: getQueryVariable('height'),
                     videoId: 'd0Zdar4SPhA',
                     playerVars: {
                         'autoplay': 1,
@@ -70,9 +66,8 @@
                     setTimeout(stopVideo, 6000);
                     done = true;
                 }
-                console.log('onPlayerStateChange');
-                console.log(event.data);
-                window.webkit.messageHandlers['\(audioControlKey)'].postMessage(JSON.stringify(event.data))
+                console.log('onPlayerStateChange' + '>>>> ' + event.data);
+                window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
             }
             function seekTo(startSeconds) {
                 console.log('seekTo')
@@ -80,9 +75,13 @@
                 player.seekTo(startSeconds, true)
             }
             function loadNewVideo(videoID) {
-                console.log('loadNewVideo' + ' ' + videoID)
-                player.loadVideoById(videoID)
-            };
+                console.log('loadNewVideo' + '>>>> ' + videoID)
+                player.loadNewVideo(videoID)
+            }
+            function playVideo() {
+                console.log('playVideo')
+                player.playVideo()
+            }
             function getVideoInfo() {
                 var duration = player.getDuration();
                 var current = player.getCurrentTime();
@@ -90,7 +89,7 @@
                     "current": current,
                     "duration": duration,
                 }
-                window.webkit.messageHandlers['\(timeKey)'].postMessage(JSON.stringify(info))
+                window.webkit.messageHandlers['time'].postMessage(JSON.stringify(info))
                 return info
             }
             function getQueryVariable(variable) {
@@ -103,6 +102,5 @@
                 return(false);
             }
         </script>
-        <script type="text/javascript"  src="iFrame.css"></script>
     </body>
 </html>
