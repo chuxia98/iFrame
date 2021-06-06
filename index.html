@@ -86,7 +86,7 @@
                 }
                 updateAll();
             }
-            function update(node){
+            function update(node) {
                 switch (node) {
                     case "status":
                         var state = player.getPlayerState()
@@ -94,6 +94,22 @@
                         break;
                 }
             }
+            // Array to track all HTML nodes
+            var nodeList = [
+            "duration",
+            "url",
+            "embedCode",
+            "percentLoaded",
+            "status",
+            "currentTime",
+            "volume",
+            "mute",
+            "quality",
+            "rate",
+            "title",
+            "author",
+            "video_id",
+            ];
             function updateAll() {
                 for (var node in nodeList){
                     update(nodeList[node]);
