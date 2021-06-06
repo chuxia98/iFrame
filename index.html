@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <script type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+        <link href="iFrame.css" rel=\"stylesheet\" />
+        <script src="https://www.youtube.com/iframe_api"></script>
+    </head>
+    <body>
+        <div id="player" style="background-color:black;"></div>
+
+        <script type="text/javascript">
+            var console = {};
+            console.log = function(message) {
+                window.webkit.messageHandlers['\(consoleLogKey)'].postMessage(message)
+            };
+       
+            var tag = document.createElement('script');
+       
+            var height = getQueryVariable('height');
+            console.log('height = ' + height);
+
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+       
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('player', {
+                    width: '100%',
+                    height: '100%',
+                    videoId: 'd0Zdar4SPhA',
+                    playerVars: {
+                        'autoplay': 1,
+                        'playsinline': 1,
+                        'enablejsapi': 1,
+                        'controls': 1,
+                        'background': 1,
+                        'loop': 1,
+                        'allowSeekAhead': 1,
+                        'modestbranding': 1
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange,
+                        'onError': onPlayerError,
+                        'onApiChange': onPlayerApiChange
+                    }
+                });
+            }
+       
+            function onPlayerApiChange() {
+                console.log('The player API changed');
+            }
+            function onPlayerError(event) {
+                console.log(event)
+            }
+            function onPlayerReady(event) {
+                console.log('onPlayerReady');
+                console.log(event.target);
+                console.log(player);
+                event.target.playVideo();
+            }
+            var done = false;
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.PLAYING && !done) {
+                    setTimeout(stopVideo, 6000);
+                    done = true;
+                }
+                console.log('onPlayerStateChange');
+                console.log(event.data);
+                window.webkit.messageHandlers['\(audioControlKey)'].postMessage(JSON.stringify(event.data))
+            }
+            function seekTo(startSeconds) {
+                console.log('seekTo')
+                console.log(startSeconds)
+                player.seekTo(startSeconds, true)
+            }
+            function loadNewVideo(videoID) {
+                console.log('loadNewVideo' + ' ' + videoID)
+                player.loadVideoById(videoID)
+            };
+            function getVideoInfo() {
+                var duration = player.getDuration();
+                var current = player.getCurrentTime();
+                var info = {
+                    "current": current,
+                    "duration": duration,
+                }
+                window.webkit.messageHandlers['\(timeKey)'].postMessage(JSON.stringify(info))
+                return info
+            }
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) {return pair[1];}
+                }
+                return(false);
+            }
+        </script>
+        <script type="text/javascript"  src="iFrame.css"></script>
+    </body>
+</html>

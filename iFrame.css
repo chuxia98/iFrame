@@ -1,0 +1,19 @@
+
+body {
+    padding: 0px;
+    margin: 0px;
+    background-color: black;
+}
+
+div {
+    background-color: green;
+    font-size: 20px;
+}
+
+p {
+    font-size: 20px;
+}
+
+span {
+    font-size: 20px;
+}
