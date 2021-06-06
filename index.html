@@ -62,14 +62,17 @@
        
             function onPlayerApiChange() {
                 console.log('The player API changed');
+                updateAll();
             }
             function onPlayerError(event) {
                 console.log(event)
+                updateAll();
             }
             function onPlayerReady(event) {
                 console.log('onPlayerReady = ' + event);
                 console.log(player);
                 event.target.playVideo();
+                updateAll();
             }
             var done = false;
             function onPlayerStateChange(event) {
@@ -81,7 +84,21 @@
                 if (isiOS) {
                     window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
                 }
+                updateAll();
             }
+            function update(node){
+                switch (node) {
+                    case "status":
+                        var state = player.getPlayerState()
+                        console.log('state ' + state);
+                        break;
+                }
+            }
+            function updateAll() {
+                for (var node in nodeList){
+                    update(nodeList[node]);
+                }
+            };
             function seekTo(startSeconds) {
                 console.log('seekTo')
                 console.log(startSeconds)
