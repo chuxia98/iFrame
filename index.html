@@ -12,11 +12,23 @@
     <body>
         <div id="player" style="background-color:black;"></div>
         <script type="text/javascript">
-            var console = {};
-            console.log = function(message) {
-                window.webkit.messageHandlers['console.log'].postMessage(message)
-            };
-       
+            var u = navigator.userAgent;
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+            if (isiOS) {
+                var console = {};
+                console.log = function(message) {
+                    window.webkit.messageHandlers['console.log'].postMessage(message)
+                };
+            }
+
+
+            var height = getQueryVariable('height');
+            if (height == false) {
+                height = 280;
+            }
+            console.log('height = ' + height);
+
             var tag = document.createElement('script');
        
             tag.src = "https://www.youtube.com/iframe_api";
@@ -27,7 +39,7 @@
             function onYouTubeIframeAPIReady() {
                 player = new YT.Player('player', {
                     width: '100%',
-                    height: getQueryVariable('height'),
+                    height: height,
                     videoId: 'd0Zdar4SPhA',
                     playerVars: {
                         'autoplay': 1,
@@ -55,8 +67,7 @@
                 console.log(event)
             }
             function onPlayerReady(event) {
-                console.log('onPlayerReady');
-                console.log(event.target);
+                console.log('onPlayerReady = ' + event);
                 console.log(player);
                 event.target.playVideo();
             }
@@ -67,7 +78,9 @@
                     done = true;
                 }
                 console.log('onPlayerStateChange' + '>>>> ' + event.data);
-                window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
+                if (isiOS) {
+                    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
+                }
             }
             function seekTo(startSeconds) {
                 console.log('seekTo')
@@ -89,7 +102,9 @@
                     "current": current,
                     "duration": duration,
                 }
-                window.webkit.messageHandlers['time'].postMessage(JSON.stringify(info))
+                if (isiOS) {
+                    window.webkit.messageHandlers['time'].postMessage(JSON.stringify(info))
+                }
                 return info
             }
             function getQueryVariable(variable) {
