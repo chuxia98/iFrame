@@ -50,7 +50,8 @@ if (videoID == false) {
   videoID = 'd0Zdar4SPhA';
 }
 
-console.log('window url = ' + window.location);
+console.log('window url = ' + window.location.href);
+console.log('window search = ' + window.location.search);
 
 var player;
 // Callback for when the YouTube iFrame player is ready
@@ -256,7 +257,6 @@ function update(node) {
       break;
   }
   var json = JSON.stringify(params);
-  console.log(json)
   if (isiOS) {
     window.webkit.messageHandlers['audioControl'].postMessage(json)
   }
