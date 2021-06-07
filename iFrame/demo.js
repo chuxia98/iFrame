@@ -50,6 +50,8 @@ if (videoID == false) {
   videoID = 'd0Zdar4SPhA';
 }
 
+console.log('window url = ' + window.location);
+
 var player;
 // Callback for when the YouTube iFrame player is ready
 function onYouTubeIframeAPIReady() {
