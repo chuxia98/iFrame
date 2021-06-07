@@ -1,5 +1,4 @@
 
-
 var u = navigator.userAgent;
 var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
 
@@ -89,9 +88,6 @@ function onPlayerStateChange(event) {
       clearIntervals() // clear all intervals
       break;
   }
-  if (isiOS) {
-    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
-  }
 };
 
 // Update HTML nodes on the page
@@ -144,6 +140,9 @@ function update(node) {
       }
       var text = 'status >>>>> ' + status + " (" + state + ")";
       console.log(text)
+      if (isiOS) {
+        window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(state))
+      }
       break;
     case "currentTime":
       var currentTime = player.getCurrentTime() + "s"
