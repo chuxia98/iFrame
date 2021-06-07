@@ -201,7 +201,7 @@ function update(node) {
       break;
     case "volume":
       var volume = player.getVolume()
-      console.log(volume)
+      params['volume'] = volume;
       break;
     case "mute":
       var mute = player.isMuted()
