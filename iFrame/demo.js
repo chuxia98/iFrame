@@ -24,6 +24,16 @@ function onYouTubeIframeAPIReady() {
     height: height,
     // Set the id of the video to be played
     videoId: 'd0Zdar4SPhA',
+    playerVars: {
+      'autoplay': 1,
+      'playsinline': 1,
+      'enablejsapi': 1,
+      'controls': 0,
+      'background': 1,
+      'loop': 1,
+      'allowSeekAhead': 1,
+      'modestbranding': 1,
+    },
     // Setup event handelers
     events: {
       'onReady': onPlayerReady,
