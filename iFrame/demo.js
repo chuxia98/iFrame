@@ -158,7 +158,8 @@ function update(node) {
       console.log('fmtEmbedCode')
       break;
     case "percentLoaded":
-      var text = player.getVideoLoadedFraction() * 100 + "%"
+      var percentLoaded = player.getVideoLoadedFraction();
+      var text = percentLoaded * 100 + "%"
       console.log(text)
       params['percentLoaded'] = percentLoaded;
       break;
