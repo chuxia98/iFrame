@@ -160,7 +160,6 @@ function update(node) {
     case "percentLoaded":
       var percentLoaded = player.getVideoLoadedFraction();
       var text = percentLoaded * 100 + "%"
-      console.log(text)
       params['percentLoaded'] = percentLoaded;
       break;
     case "status":
@@ -186,13 +185,11 @@ function update(node) {
           break;
       }
       var text = 'status >>>>> ' + status + " (" + state + ")";
-      console.log(text)
       params['status'] = status;
       params['state'] = state;
       break;
     case "currentTime":
-      var currentTime = player.getCurrentTime() + "s"
-      console.log(currentTime)
+      var currentTime = player.getCurrentTime();
       params['currentTime'] = currentTime;
       break;
     case "volume":
@@ -201,7 +198,6 @@ function update(node) {
       break;
     case "mute":
       var mute = player.isMuted()
-      console.log(mute)
       params['mute'] = mute;
       break;
     case "quality":
@@ -242,7 +238,6 @@ function update(node) {
       break;
     case "title":
       var title = player.getVideoData()["title"]
-      console.log(title)
       params['title'] = title;
       break;
     case "author":
@@ -251,12 +246,13 @@ function update(node) {
       break;
     case "video_id":
       var video_id = player.getVideoData()["video_id"]
-      console.log(video_id)
       params['video_id'] = video_id;
       break;
   }
+  var json = JSON.stringify(params);
+  console.log(json)
   if (isiOS) {
-    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(params))
+    window.webkit.messageHandlers['audioControl'].postMessage(json)
   }
 };
 // Updates all HTML nodes
