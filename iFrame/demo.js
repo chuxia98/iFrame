@@ -224,7 +224,7 @@ function update(node) {
       break;
   }
   if (isiOS) {
-    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(state))
+    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(params))
   }
 };
 // Updates all HTML nodes
