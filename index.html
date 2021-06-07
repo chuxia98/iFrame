@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+    <script type = "text/javascript" src = "http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    <script type = "text/javascript" src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    <head>
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta charset="utf-8" />
+        <meta name="viewport" content="user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, width=device-width" />
+        <link href="iFrame.css" rel="stylesheet" />
+        <script src="https://www.youtube.com/iframe_api"></script>
+    </head>
+    <body>
+        <div id="player" style="background-color:black;"></div>
+        <script type="text/javascript">
+            var u = navigator.userAgent;
+            var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+            if (isiOS) {
+                var console = {};
+                console.log = function(message) {
+                    window.webkit.messageHandlers['console.log'].postMessage(message)
+                };
+            }
+
+
+            var height = getQueryVariable('height');
+            if (height == false) {
+                height = 280;
+            }
+            console.log('height = ' + height);
+
+            var tag = document.createElement('script');
+       
+            tag.src = "https://www.youtube.com/iframe_api";
+            var firstScriptTag = document.getElementsByTagName('script')[0];
+            firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+       
+            var player;
+            function onYouTubeIframeAPIReady() {
+                player = new YT.Player('player', {
+                    width: '100%',
+                    height: height,
+                    videoId: 'd0Zdar4SPhA',
+                    playerVars: {
+                        'autoplay': 1,
+                        'playsinline': 1,
+                        'enablejsapi': 1,
+                        'controls': 1,
+                        'background': 1,
+                        'loop': 1,
+                        'allowSeekAhead': 1,
+                        'modestbranding': 1
+                    },
+                    events: {
+                        'onReady': onPlayerReady,
+                        'onStateChange': onPlayerStateChange,
+                        'onError': onPlayerError,
+                        'onApiChange': onPlayerApiChange
+                    }
+                });
+            }
+       
+            function onPlayerApiChange() {
+                console.log('The player API changed');
+                updateAll();
+            }
+            function onPlayerError(event) {
+                console.log(event)
+                updateAll();
+            }
+            function onPlayerReady(event) {
+                console.log('onPlayerReady = ' + event);
+                console.log(player);
+                playVideo();
+                updateAll();
+            }
+            var done = false;
+            function onPlayerStateChange(event) {
+                if (event.data == YT.PlayerState.PLAYING && !done) {
+                    setTimeout(stopVideo, 6000);
+                    done = true;
+                }
+                // Get current state
+                // Video has ended
+                switch (event.data) {
+                    case YT.PlayerState.ENDED:
+                    updateAll() // set status for state, ...
+                    clearIntervals() // clear all intervals
+                    break;
+                    case YT.PlayerState.PLAYING:
+                    updateAll() // set status for state, ...
+                    setIntervals() // set intervals for ...
+                    break;
+                    case YT.PlayerState.PAUSED:
+                    updateAll() // set status for state, ...
+                    clearIntervals() // clear all intervals
+                    break;
+                    case YT.PlayerState.BUFFERING:
+                    updateAll() // set status for state, ...
+                    clearIntervals() // clear all intervals
+                    break;
+                    case YT.PlayerState.CUED:
+                    updateAll() // set status for state, ...
+                    clearIntervals() // clear all intervals
+                    break;
+                    default:
+                    updateAll() // set status for state, ...
+                    clearIntervals() // clear all intervals
+                    break;
+
+                }
+                console.log('onPlayerStateChange' + '>>>> ' + event.data);
+                if (isiOS) {
+                    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
+                }
+                updateAll();
+            }
+            function clearIntervals() {
+
+            }
+            function update(node) {
+                switch (node) {
+                    case "status":
+                        var state = player.getPlayerState()
+                        switch (state){
+                            case YT.PlayerState.ENDED:
+                            status="ENDED";
+                            break;
+                            case YT.PlayerState.PLAYING:   
+                            status="PLAYING";
+                            break;
+                            case YT.PlayerState.PAUSED:    
+                            status="PAUSED";
+                            break;
+                            case YT.PlayerState.BUFFERING: 
+                            status="BUFFERING";
+                            break;
+                            case YT.PlayerState.CUED:      
+                            status="CUED";
+                            break;
+                            default:
+                            status="UNKNOWN";
+                            break;
+                        }
+                        console.log('state ' + state);
+                        break;
+                }
+            }
+            // Array to track all HTML nodes
+            var nodeList = [
+                "duration",
+                "url",
+                "embedCode",
+                "percentLoaded",
+                "status",
+                "currentTime",
+                "volume",
+                "mute",
+                "quality",
+                "rate",
+                "title",
+                "author",
+                "video_id",
+            ];
+            function updateAll() {
+                for (var node in nodeList){
+                    update(nodeList[node]);
+                }
+            };
+            function seekTo(startSeconds) {
+                console.log('seekTo')
+                console.log(startSeconds)
+                player.seekTo(startSeconds, true)
+            }
+            function loadNewVideo(videoID) {
+                console.log('loadNewVideo' + '>>>> ' + videoID)
+                player.loadNewVideo(videoID)
+            }
+            function stopVideo() {
+                console.log('js-stop')
+                player.pauseVideo();
+            }
+            function pauseVideo() {
+                console.log('js-pause')
+               player.pauseVideo();
+            }
+            function playVideo() {
+                console.log('playVideo')
+                player.playVideo()
+            }
+            function getVideoInfo() {
+                var duration = player.getDuration();
+                var current = player.getCurrentTime();
+                var info = {
+                    "current": current,
+                    "duration": duration,
+                }
+                if (isiOS) {
+                    window.webkit.messageHandlers['time'].postMessage(JSON.stringify(info))
+                }
+                return info
+            }
+            function getQueryVariable(variable) {
+                var query = window.location.search.substring(1);
+                var vars = query.split("&");
+                for (var i = 0; i < vars.length; i++) {
+                    var pair = vars[i].split("=");
+                    if (pair[0] == variable) {return pair[1];}
+                }
+                return(false);
+            }
+        </script>
+    </body>
+</html>
