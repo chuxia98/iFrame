@@ -7,7 +7,7 @@ function stopVideo() {
 
 function pauseVideo() {
     console.log('js-pause')
-//    player.pauseVideo();
+    //    player.pauseVideo();
     callPlayer('pauseVideo')
 }
 
@@ -17,18 +17,18 @@ function playVideo() {
 }
 
 function loadNewVideo(videoID) {
-   console.log('js-loadNewVideo')
-   console.log(videoID)
-   callPlayer('loadVideoById', videoID);
+    console.log('js-loadNewVideo')
+    console.log(videoID)
+    callPlayer('loadVideoById', videoID);
 };
 
 function nextVideo() {
-//    player.nextVideo();
+    //    player.nextVideo();
     callPlayer('nextVideo')
 }
 
 function previousVideo() {
-//    player.previousVideo();
+    //    player.previousVideo();
     callPlayer('previousVideo')
 }
 
