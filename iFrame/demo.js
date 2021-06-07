@@ -104,16 +104,20 @@ function onPlayerStateChange(event) {
 // with most recent values from
 // the YouTube iFrame API
 function update(node) {
+  var params = {};
   switch (node) {
     // Update player reported changes
     case "duration":
+      var duration = player.getDuration();
       // document.getElementById("duration").innerHTML = player.getDuration() + "s";
-      console.log(player.getDuration())
+      console.log(duration)
+      params['duration'] = duration;
       break;
     case "url":
       var url = player.getVideoUrl();
       //document.getElementById("url").innerHTML = "<a href=\"" + url + "\" target=\"_blank\">" + url + "</a>";
       console.log(url)
+      params['url'] = url;
       break;
     case "embedCode":
       // var embedCode = player.getVideoEmbedCode();
@@ -125,6 +129,7 @@ function update(node) {
     case "percentLoaded":
       var text = player.getVideoLoadedFraction() * 100 + "%"
       console.log(text)
+      params['percentLoaded'] = percentLoaded;
       break;
     case "status":
       var state = player.getPlayerState()
@@ -150,13 +155,13 @@ function update(node) {
       }
       var text = 'status >>>>> ' + status + " (" + state + ")";
       console.log(text)
-      if (isiOS) {
-        window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(state))
-      }
+      params['status'] = status;
+      params['state'] = state;
       break;
     case "currentTime":
       var currentTime = player.getCurrentTime() + "s"
       console.log(currentTime)
+      params['currentTime'] = currentTime;
       break;
     case "volume":
       var volume = player.getVolume()
@@ -165,6 +170,7 @@ function update(node) {
     case "mute":
       var mute = player.isMuted()
       console.log(mute)
+      params['mute'] = mute;
       break;
     case "quality":
       // var availableQualityLevels = player.getAvailableQualityLevels()
@@ -205,6 +211,7 @@ function update(node) {
     case "title":
       var title = player.getVideoData()["title"]
       console.log(title)
+      params['title'] = title;
       break;
     case "author":
       var author = player.getVideoData()["author"]
@@ -213,7 +220,11 @@ function update(node) {
     case "video_id":
       var video_id = player.getVideoData()["video_id"]
       console.log(video_id)
+      params['video_id'] = video_id;
       break;
+  }
+  if (isiOS) {
+    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(state))
   }
 };
 // Updates all HTML nodes
