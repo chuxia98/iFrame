@@ -215,8 +215,8 @@ function update(node) {
       //   opt.value = availableQualityLevels[i];
       //   selectbox.options.add(opt);
       // }
-      // var quality = player.getPlaybackQuality()
-      console.log('quality')
+      var quality = player.getPlaybackQuality()
+      params['quality'] = quality;
       break;
     case "rate":
       // var availableRates = player.getAvailablePlaybackRates()
@@ -233,8 +233,8 @@ function update(node) {
       //   opt.value = availableRates[i];
       //   selectbox.options.add(opt);
       // }
-      // var rate = player.getPlaybackRate()
-      console.log('rate')
+      var rate = player.getPlaybackRate()
+      params['rate'] = rate;
       break;
     case "title":
       var title = player.getVideoData()["title"]
