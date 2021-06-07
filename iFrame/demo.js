@@ -21,10 +21,10 @@ var player;
 function onYouTubeIframeAPIReady() {
   player = new YT.Player('player', {
     // Set Player height and width
-    height: '100%',
     width: '100%',
+    height: height,
     // Set the id of the video to be played
-    videoId: 'M7lc1UVf-VE',
+    videoId: 'd0Zdar4SPhA',
     // Setup event handelers
     events: {
       'onReady': onPlayerReady,
@@ -89,7 +89,9 @@ function onPlayerStateChange(event) {
       clearIntervals() // clear all intervals
       break;
   }
-  window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
+  if (isiOS) {
+    window.webkit.messageHandlers['audioControl'].postMessage(JSON.stringify(event.data))
+  }
 };
 
 // Update HTML nodes on the page
@@ -108,11 +110,11 @@ function update(node) {
       console.log(url)
       break;
     case "embedCode":
-      var embedCode = player.getVideoEmbedCode();
-      var index = Math.ceil(embedCode.length / 3);
-      var fmtEmbedCode = [embedCode.slice(0, index), "\n", embedCode.slice(index, index * 2), "\n", embedCode.slice(index * 2)].join('');
+      // var embedCode = player.getVideoEmbedCode();
+      // var index = Math.ceil(embedCode.length / 3);
+      // var fmtEmbedCode = [embedCode.slice(0, index), "\n", embedCode.slice(index, index * 2), "\n", embedCode.slice(index * 2)].join('');
       // document.getElementById("embedCode").innerText = fmtEmbedCode
-      console.log(fmtEmbedCode)
+      console.log('fmtEmbedCode')
       break;
     case "percentLoaded":
       var text = player.getVideoLoadedFraction() * 100 + "%"
@@ -140,7 +142,7 @@ function update(node) {
           status = "UNKNOWN";
           break;
       }
-      var text = status + " (" + state + ")";
+      var text = 'status >>>>> ' + status + " (" + state + ")";
       console.log(text)
       break;
     case "currentTime":
@@ -156,40 +158,40 @@ function update(node) {
       console.log(mute)
       break;
     case "quality":
-      var availableQualityLevels = player.getAvailableQualityLevels()
-      var selectbox = document.getElementById('qualityOption');
-      //clear existing options
-      var i;
-      for (i = selectbox.options.length - 1; i >= 0; i--) {
-        selectbox.remove(i);
-      }
-      //write current available options
-      for (var i in availableQualityLevels) {
-        var opt = document.createElement("OPTION");
-        opt.text = availableQualityLevels[i];
-        opt.value = availableQualityLevels[i];
-        selectbox.options.add(opt);
-      }
-      var quality = player.getPlaybackQuality()
-      console.log(quality)
+      // var availableQualityLevels = player.getAvailableQualityLevels()
+      // var selectbox = document.getElementById('qualityOption');
+      // //clear existing options
+      // var i;
+      // for (i = selectbox.options.length - 1; i >= 0; i--) {
+      //   selectbox.remove(i);
+      // }
+      // //write current available options
+      // for (var i in availableQualityLevels) {
+      //   var opt = document.createElement("OPTION");
+      //   opt.text = availableQualityLevels[i];
+      //   opt.value = availableQualityLevels[i];
+      //   selectbox.options.add(opt);
+      // }
+      // var quality = player.getPlaybackQuality()
+      console.log('quality')
       break;
     case "rate":
-      var availableRates = player.getAvailablePlaybackRates()
-      var selectbox = document.getElementById('rateOption');
-      //clear existing options
-      var i;
-      for (i = selectbox.options.length - 1; i >= 0; i--) {
-        selectbox.remove(i);
-      }
-      //write current available options
-      for (var i in availableRates) {
-        var opt = document.createElement("OPTION");
-        opt.text = availableRates[i];
-        opt.value = availableRates[i];
-        selectbox.options.add(opt);
-      }
-      var rate = player.getPlaybackRate()
-      console.log(rate)
+      // var availableRates = player.getAvailablePlaybackRates()
+      // var selectbox = document.getElementById('rateOption');
+      // //clear existing options
+      // var i;
+      // for (i = selectbox.options.length - 1; i >= 0; i--) {
+      //   selectbox.remove(i);
+      // }
+      // //write current available options
+      // for (var i in availableRates) {
+      //   var opt = document.createElement("OPTION");
+      //   opt.text = availableRates[i];
+      //   opt.value = availableRates[i];
+      //   selectbox.options.add(opt);
+      // }
+      // var rate = player.getPlaybackRate()
+      console.log('rate')
       break;
     case "title":
       var title = player.getVideoData()["title"]
