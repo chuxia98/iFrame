@@ -13,7 +13,38 @@ var height = getQueryVariable('height');
 if (height == false) {
   height = 280;
 }
-console.log('height = ' + height);
+var autoplay = getQueryVariable('autoplay');
+if (autoplay == false) {
+  autoplay = 1;
+}
+var playsinline = getQueryVariable('playsinline');
+if (playsinline == false) {
+  playsinline = 1;
+}
+var enablejsapi = getQueryVariable('enablejsapi');
+if (enablejsapi == false) {
+  enablejsapi = 1;
+}
+var controls = getQueryVariable('controls');
+if (controls == false) {
+  controls = 1;
+}
+var background = getQueryVariable('background');
+if (background == false) {
+  background = 1;
+}
+var loop = getQueryVariable('loop');
+if (loop == false) {
+  loop = 1;
+}
+var allowSeekAhead = getQueryVariable('allowSeekAhead');
+if (allowSeekAhead == false) {
+  allowSeekAhead = 1;
+}
+var modestbranding = getQueryVariable('modestbranding');
+if (modestbranding == false) {
+  modestbranding = 1;
+}
 
 var player;
 // Callback for when the YouTube iFrame player is ready
@@ -25,14 +56,14 @@ function onYouTubeIframeAPIReady() {
     // Set the id of the video to be played
     videoId: 'd0Zdar4SPhA',
     playerVars: {
-      'autoplay': 1,
-      'playsinline': 1,
-      'enablejsapi': 1,
-      'controls': 0,
-      'background': 1,
-      'loop': 1,
-      'allowSeekAhead': 1,
-      'modestbranding': 1,
+      'autoplay': autoplay,
+      'playsinline': playsinline,
+      'enablejsapi': enablejsapi,
+      'controls': controls,
+      'background': background,
+      'loop': loop,
+      'allowSeekAhead': allowSeekAhead,
+      'modestbranding': modestbranding,
     },
     // Setup event handelers
     events: {
