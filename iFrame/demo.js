@@ -283,8 +283,8 @@ function loadNewVideo(videoID) {
   console.log(videoID)
   player.loadVideoById(videoID);
 };
-function cueNewVideo() {
-  player.cueVideoById(document.getElementById("video_idOption").value);
+function cueNewVideo(option) {
+  player.cueVideoById(option);
 };
 function playVideo() {
   player.playVideo();
@@ -295,11 +295,11 @@ function pauseVideo() {
 function stopVideo() {
   player.stopVideo();
 };
-function seekTo() {
-  player.seekTo(document.getElementById("currentTimeOption").value);
+function seekTo(position) {
+  player.seekTo(position);
 };
-function setVolume() {
-  player.setVolume(document.getElementById("volumeOption").value);
+function setVolume(volume) {
+  player.setVolume(volume);
 };
 function mute() {
   player.mute();
@@ -307,11 +307,11 @@ function mute() {
 function unmute() {
   player.unMute();
 };
-function setQuality() {
-  player.setPlaybackQuality(document.getElementById("qualityOption").value);
+function setQuality(quality) {
+  player.setPlaybackQuality(quality);
 };
-function setRate() {
-  player.setPlaybackRate(document.getElementById("rateOption").value);
+function setRate(rate) {
+  player.setPlaybackRate(rate);
 };
 
 // Controls interval handlers to update page contens
