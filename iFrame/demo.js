@@ -45,6 +45,10 @@ var modestbranding = getQueryVariable('modestbranding');
 if (modestbranding == false) {
   modestbranding = 1;
 }
+var videoID = getQueryVariable('videoID')
+if (videoID == false) {
+  videoID = 'd0Zdar4SPhA';
+}
 
 var player;
 // Callback for when the YouTube iFrame player is ready
@@ -54,7 +58,7 @@ function onYouTubeIframeAPIReady() {
     width: '100%',
     height: height,
     // Set the id of the video to be played
-    videoId: 'd0Zdar4SPhA',
+    videoId: videoID,
     playerVars: {
       'autoplay': autoplay,
       'playsinline': playsinline,
