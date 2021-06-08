@@ -45,6 +45,13 @@ var modestbranding = getQueryVariable('modestbranding');
 if (modestbranding == false) {
   modestbranding = 1;
 }
+var videoID = getQueryVariable('videoID')
+if (videoID == false) {
+  videoID = 'd0Zdar4SPhA';
+}
+
+console.log('window url = ' + window.location.href);
+console.log('window search = ' + window.location.search);
 
 var player;
 // Callback for when the YouTube iFrame player is ready
@@ -54,7 +61,7 @@ function onYouTubeIframeAPIReady() {
     width: '100%',
     height: height,
     // Set the id of the video to be played
-    videoId: 'd0Zdar4SPhA',
+    videoId: videoID,
     playerVars: {
       'autoplay': autoplay,
       'playsinline': playsinline,
@@ -194,7 +201,7 @@ function update(node) {
       break;
     case "volume":
       var volume = player.getVolume()
-      console.log(volume)
+      params['volume'] = volume;
       break;
     case "mute":
       var mute = player.isMuted()
@@ -250,7 +257,6 @@ function update(node) {
       break;
   }
   var json = JSON.stringify(params);
-  console.log(json)
   if (isiOS) {
     window.webkit.messageHandlers['audioControl'].postMessage(json)
   }
